@@ -1,0 +1,25 @@
+#############################################
+# Syntax Coloring Map For Cytron Motor Driver
+#############################################
+# Class and Static Instance
+#############################################
+
+CytronMakerSumo	KEYWORD3
+MakerSumo		KEYWORD3
+
+
+
+#############################################
+# Methods and Functions 
+#############################################
+
+begin				KEYWORD2
+readDipSwitch		KEYWORD2
+readBatteryVoltage	KEYWORD2
+stop				KEYWORD2
+moveForward			KEYWORD2
+moveBackward		KEYWORD2
+turnLeft 			KEYWORD2
+turnRight 			KEYWORD2
+setServoPosition	KEYWORD2
+playMelody			KEYWORD2
