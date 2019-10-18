@@ -14,38 +14,46 @@ This is Arduino Library for Cytron Maker Mini Sumo Controller (MAKER-MSUMO).
 
 ## Predefined Pin Constants
 These pin constants are predefined in the library.
+- Opponent Sensors: `OPP_FC, OPP_FL, OPP_FR, OPP_L, OPP_R`
+- Edge Sensors: `EDGE_L, EDGE_R`
+- Start Button: `START`
+- Potentiometer: `POT`
+- Programmable LED: `LED`
+- General Purpose Input/Output: `GPIO1, GPIO2`
+
+**Example Code:**<br>
 ```
-PWM_L
-PWM_R
-DIR_L
-DIR_R
+void setup() {
+  MakerSumo.begin();
+  
+  // Wait until start button is pressed.
+  while (digitalRead(START) == HIGH);
+}
 
-LED
-SERVO
-BUZZER
-
-OPP_FC
-OPP_FL
-OPP_FR
-OPP_L
-OPP_R
-
-START
-GPIO1
-GPIO2
-
-EDGE_L
-EDGE_R
-
-POT
-MODE
-VBATT
+void loop() {
+  digitalWrite(LED, HIGH);
+  delay(300);
+  
+  digitalWrite(LED, LOW);
+  delay(300);
+}
 ```
 
 <br><br>
 
 ## Library Functions
-These functions are provided in the library.
+These functions are provided in the library:<br>
+- [begin()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumobegin)
+- [readDipSwitch()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoreaddipswitch)
+- [readBatteryVoltage()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoreadbatteryvoltage)
+- [stop()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumostop)
+- [moveForward()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumomoveforward)
+- [moveBackward()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumomovebackward)
+- [turnLeft()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoturnleft)
+- [turnRight()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoturnright)
+- [setServoPosition()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumosetservoposition)
+- [playMelody()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoplaymelody)
+
 <br><br>
 
 ### MakerSumo.begin()
