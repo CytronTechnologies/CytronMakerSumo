@@ -141,10 +141,10 @@ class CytronMakerSumo
     void turnLeft(int speed);
     void turnRight(int speed);
     void setServoPosition(int position);
+    void playTone(int pitch, int duration);
     void playMelody(const int *pitch, const int *duration, int length);
     
   protected:
-    // Object for servo.
     Servo _servo;
 };
 

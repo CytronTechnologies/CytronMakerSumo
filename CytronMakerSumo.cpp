@@ -101,23 +101,38 @@ void CytronMakerSumo::setServoPosition(int position)
 }
 
 
+void CytronMakerSumo::playTone(int pitch, int duration)
+{
+  if (pitch == 0) {
+    delay(duration);
+    return;
+  }
+  
+  long halfPeriod = 1000000L / (long)pitch / 2L;
+  for (long i = 0; i < (long)duration * 1000L; i += halfPeriod * 2L) {
+    digitalWrite(BUZZER, HIGH);
+    delayMicroseconds(halfPeriod);
+    digitalWrite(BUZZER, LOW);
+    delayMicroseconds(halfPeriod);
+  }
+}
+
+
 void CytronMakerSumo::playMelody(const int *pitch, const int *duration, int length)
 {
   for (int i = 0; i < length; i++) {
     // To calculate the note duration, take one second divided by the note type.
     // e.g. quarter note = 1000 / 4, eighth note = 1000 / 8, etc.
     int noteDuration = 1000 / duration[i];
-    tone(BUZZER, pitch[i], noteDuration);
+    playTone(pitch[i], noteDuration);
 
     // To distinguish the notes, set a minimum time between them.
     // the note's duration + 30% seems to work well.
-    int pauseBetweenNotes = noteDuration * 1.30;
+    int pauseBetweenNotes = noteDuration * 0.30;
     delay(pauseBetweenNotes);
-    
-    // Stop the tone playing:
-    noTone(BUZZER);
   }
 }
+
 
 
 // Static instance.
