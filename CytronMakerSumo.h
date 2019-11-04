@@ -34,6 +34,14 @@
 #define VBATT 	A7
 
 
+// Default value for edge sensors threshold if not calibrated.
+#define DEFAULT_EDGE_THRESHOLD  800
+
+
+// EEPROM Address.
+#define EEADD_EDGE_L  0
+#define EEADD_EDGE_R  (EEADD_EDGE_L + sizeof(int))
+
 
 // Melody pitches.
 #define NOTE_B0  31
@@ -143,6 +151,9 @@ class CytronMakerSumo
     void setServoPosition(int position);
     void playTone(int pitch, int duration);
     void playMelody(const int *pitch, const int *duration, int length);
+    void calibrateEdgeSensors(void);
+    int readEdgeSensorThreshold(int side);
+    bool isEdgeDetected(int side);
     
   protected:
     Servo _servo;

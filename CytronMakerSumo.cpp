@@ -1,3 +1,4 @@
+#include <EEPROM.h>
 #include "CytronMakerSumo.h"
 
 
@@ -130,6 +131,85 @@ void CytronMakerSumo::playMelody(const int *pitch, const int *duration, int leng
     // the note's duration + 30% seems to work well.
     int pauseBetweenNotes = noteDuration * 0.30;
     delay(pauseBetweenNotes);
+  }
+}
+
+
+void CytronMakerSumo::calibrateEdgeSensors(void)
+{
+  int minL = 1024;
+  int minR = 1024;
+  int maxL = 0;
+  int maxR = 0;
+  
+  int timestamp = millis();
+  
+  // Loop until start button is pressed.
+  do {
+    // Get the minimum and maximum value.
+    int tempL = analogRead(EDGE_L);
+    int tempR = analogRead(EDGE_R);
+    
+    if (minL > tempL) minL = tempL;
+    if (minR > tempR) minR = tempR;
+    
+    if (maxL < tempL) maxL = tempL;
+    if (maxR < tempR) maxR = tempR;
+      
+    // Blink LED.
+    if (millis() - timestamp > 100) {
+      timestamp +=  100;
+      digitalWrite(LED, !digitalRead(LED));
+    }
+  } while (digitalRead(START) == HIGH);
+  while (digitalRead(START) == LOW);
+  digitalWrite(LED, LOW);
+  
+  // Calculate and save the threshold to EEPROM.
+  if (maxL > minL) {
+    int threshold = ((maxL - minL) * 3 / 5) + minL;
+    EEPROM.put(EEADD_EDGE_L, threshold);
+  }
+  
+  if (maxR > minR) {
+    int threshold = ((maxR - minR) * 3 / 5) + minR;
+    EEPROM.put(EEADD_EDGE_R, threshold);
+  }
+}
+
+
+int CytronMakerSumo::readEdgeSensorThreshold(int side)
+{
+  int eepromAddress;
+  if (side == EDGE_L) {
+    eepromAddress = EEADD_EDGE_L;
+  }
+  else if (side == EDGE_R) {
+    eepromAddress = EEADD_EDGE_R;
+  }
+  else {
+    return 0;
+  }
+  
+  int threshold;
+  EEPROM.get(eepromAddress, threshold);
+  
+  // Use default value if the value in EEPROM is invalid.
+  if ((threshold <= 0) || (threshold >= 1023)) {
+    threshold = DEFAULT_EDGE_THRESHOLD;
+  }
+  
+  return threshold;
+}
+
+
+bool CytronMakerSumo::isEdgeDetected(int side)
+{
+  if (analogRead(side) < readEdgeSensorThreshold(side)) {
+    return true;
+  }
+  else {
+    return false;
   }
 }
 
