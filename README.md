@@ -53,6 +53,9 @@ These functions are provided in the library:<br>
 - [turnRight()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoturnright)
 - [setServoPosition()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumosetservoposition)
 - [playMelody()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoplaymelody)
+- [calibrateEdgeSensors()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumocalibrateedgesensors)
+- [readEdgeSensorThreshold()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoreadedgesensorthreshold)
+- [isEdgeDetected()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoisedgedetected)
 
 <br><br>
 
@@ -321,6 +324,80 @@ int melodyDuration[] = {10, 10, 10, 10, 10, 10, 10, 10, 10};
 void setup() {
   MakerSumo.begin();
   MakerSumo.playMelody(melodyPitch, melodyDuration, 9);
+}
+```
+<br>
+
+### MakerSumo.calibrateEdgeSensors()
+Calibrate the edge sensors.<br>
+Sweep both edge sensors across the white edge and black background.<br>
+Press START button once done. Threshold will be calculated and saved to EEPROM.
+
+**Syntax:**<br>
+`void MakerSumo.calibrateEdgeSensors(void);`
+
+**Parameters:**<br>
+None
+
+**Returns:**<br>
+None
+
+**Example Code:**<br>
+```
+void setup() {
+  MakerSumo.begin();
+  MakerSumo.calibrateEdgeSensors();
+}
+```
+<br>
+
+### MakerSumo.readEdgeSensorThreshold()
+Read the calibrated threshold for edge sensor.<br>
+If the sensors are not calibrated before, a default value will be returned.
+
+**Syntax:**<br>
+`int MakerSumo.readBatteryVoltage(int side);`
+
+**Parameters:**<br>
+- side - Which side of edge sensor (EDGE_L or EDGE_R).
+
+**Returns:**<br>
+The threshold of the edge sensor.
+
+**Example Code:**<br>
+```
+void setup() {
+  MakerSumo.begin();
+  Serial.begin(115200);
+  
+  int leftEdgeThreshold = MakerSumo.readEdgeSensorThreshold(EDGE_L);
+  println(leftEdgeThreshold);
+}
+```
+<br>
+
+### MakerSumo.isEdgeDetected()
+Check if the edge is detected.<br>
+Edge sensor value is compared with the valibrated threshold in EEPROM.<br>
+If the sensor is not calibrated before, a default value will be used instead.
+
+**Syntax:**<br>
+`bool MakerSumo.isEdgeDetected(int side);`
+
+**Parameters:**<br>
+- side - Which side of edge sensor (EDGE_L or EDGE_R).
+
+**Returns:**<br>
+True if edge is detected. False otherwise.
+
+**Example Code:**<br>
+```
+void setup() {
+  MakerSumo.begin();
+  Serial.begin(115200);
+  
+  bool rightEdgeDetected = MakerSumo.isEdgeDetected(EDGE_R);
+  println(rightEdgeDetected);
 }
 ```
 <br>
