@@ -96,6 +96,31 @@ void CytronMakerSumo::turnRight(int speed)
 }
 
 
+void CytronMakerSumo::setMotorSpeed(int side, int speed)
+{
+  int direction;
+  if (speed >= 0) {
+    direction = LOW;
+  }
+  else {
+    speed = -speed;
+    direction = HIGH;
+  }
+  
+  switch (side) {
+    case MOTOR_L:
+      analogWrite(PWM_L, speed);
+      digitalWrite(DIR_L, direction);
+      break;
+      
+    case MOTOR_R:
+      analogWrite(PWM_R, speed);
+      digitalWrite(DIR_R, direction);
+      break;
+  }
+}
+
+
 void CytronMakerSumo::setServoPosition(int position)
 {
   _servo.write(position);

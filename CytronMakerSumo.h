@@ -34,6 +34,11 @@
 #define VBATT 	A7
 
 
+// Constant.
+#define MOTOR_L   0
+#define MOTOR_R   1
+
+
 // Default value for edge sensors threshold if not calibrated.
 #define DEFAULT_EDGE_THRESHOLD  800
 
@@ -148,6 +153,7 @@ class CytronMakerSumo
     void moveBackward(int speed);
     void turnLeft(int speed);
     void turnRight(int speed);
+    void setMotorSpeed(int side, int speed);
     void setServoPosition(int position);
     void playTone(int pitch, int duration);
     void playMelody(const int *pitch, const int *duration, int length);

@@ -21,6 +21,7 @@ moveForward				KEYWORD2
 moveBackward			KEYWORD2
 turnLeft 				KEYWORD2
 turnRight 				KEYWORD2
+setMotorSpeed			KEYWORD2
 setServoPosition		KEYWORD2
 playTone				KEYWORD2
 playMelody				KEYWORD2
