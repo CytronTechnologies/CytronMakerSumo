@@ -51,6 +51,7 @@ These functions are provided in the library:<br>
 - [moveBackward()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumomovebackward)
 - [turnLeft()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoturnleft)
 - [turnRight()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoturnright)
+- [setMotorSpeed()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumosetmotorspeed)
 - [setServoPosition()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumosetservoposition)
 - [playMelody()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumoplaymelody)
 - [calibrateEdgeSensors()](https://github.com/CytronTechnologies/CytronMakerSumo#makersumocalibrateedgesensors)
@@ -264,6 +265,28 @@ void setup() {
 ```
 <br>
 
+### MakerSumo.setMotorSpeed()
+Set the speed for each motor independently.
+
+**Syntax:**<br>
+`void setMotorSpeed(int side, int speed);`
+
+**Parameters:**<br>
+- ***side*** - Which motor (MOTOR_L or MOTOR_R)?
+- ***speed*** - Motor speed (-255 to 255, negative = reverse).
+
+**Returns:**<br>
+None
+
+**Example Code:**<br>
+```
+void setup() {
+  MakerSumo.begin();
+  MakerSumo.setMotorSpeed(MOTOR_L, 50);
+}
+```
+<br>
+
 ### MakerSumo.setServoPosition()
 Control the servo position.
 
@@ -359,7 +382,7 @@ If the sensors are not calibrated before, a default value will be returned.
 `int MakerSumo.readBatteryVoltage(int side);`
 
 **Parameters:**<br>
-- side - Which side of edge sensor (EDGE_L or EDGE_R).
+- ***side*** - Which side of edge sensor (EDGE_L or EDGE_R).
 
 **Returns:**<br>
 The threshold of the edge sensor.
@@ -385,7 +408,7 @@ If the sensor is not calibrated before, a default value will be used instead.
 `bool MakerSumo.isEdgeDetected(int side);`
 
 **Parameters:**<br>
-- side - Which side of edge sensor (EDGE_L or EDGE_R).
+- ***side*** - Which side of edge sensor (EDGE_L or EDGE_R).
 
 **Returns:**<br>
 True if edge is detected. False otherwise.
