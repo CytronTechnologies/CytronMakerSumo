@@ -20,8 +20,19 @@
 #include "CytronMakerSumo.h"
 
 
+
+// Edge Sensor Threshold.
+#define EDGE_L_THRESHOLD  720
+#define EDGE_R_THRESHOLD  638
+
+// Constants for direction.
+#define LEFT    0
+#define RIGHT   1
+
+
+
 // Searching direction.
-int searchDir = 0;
+int searchDir = LEFT;
 
 // Define note and duration for Super Mario melody.
 int melodyPitch[] = {NOTE_E5, NOTE_E5, 0, NOTE_E5, 0, NOTE_C5, NOTE_E5, 0, NOTE_G5};
@@ -37,7 +48,7 @@ void setup() {
   MakerSumo.begin();
 
   // Play the Super Mario melody once.
-  //MakerSumo.playMelody(melodyPitch, melodyDuration, 9);
+  MakerSumo.playMelody(melodyPitch, melodyDuration, 9);
 
   // Wait until start button is pressed and released.
   while (digitalRead(START));
@@ -57,18 +68,18 @@ void setup() {
  *******************************************************************************/
 void loop() {
   // Edge is detected on the left.
-  if (analogRead(EDGE_L) < 720) {
+  if (analogRead(EDGE_L) < EDGE_L_THRESHOLD) {
     // Back off and make a U-Turn to the right.
-    backoff(1);
+    backoff(RIGHT);
 
     // Toggle the search direction.
     searchDir ^= 1;
   }
   
   // Edge is detected on the right.
-  else if (analogRead(EDGE_R) < 638) {
+  else if (analogRead(EDGE_R) < EDGE_R_THRESHOLD) {
     // Back off and make a U-Turn to the left.
-    backoff(0);
+    backoff(LEFT);
     
     // Toggle the search direction.
     searchDir ^= 1;
@@ -138,17 +149,15 @@ void startRoutine() {
 
 /*******************************************************************************
  * Search
- * dir = 0 - Turn left.
- * dir = 1 - Turn right.
  *******************************************************************************/
 void search(int dir) {
   // Move in circular motion.
-  if (dir == 0) {
-    MakerSumo.setMotorSpeed(MOTOR_L, 50);
+  if (dir == LEFT) {
+    MakerSumo.setMotorSpeed(MOTOR_L, 60);
     MakerSumo.setMotorSpeed(MOTOR_R, 80);
   } else {
     MakerSumo.setMotorSpeed(MOTOR_L, 80);
-    MakerSumo.setMotorSpeed(MOTOR_R, 50);
+    MakerSumo.setMotorSpeed(MOTOR_R, 60);
   }
 }
 
@@ -187,43 +196,27 @@ void attack() {
 /*******************************************************************************
  * Back Off
  * This function should be called when the ring edge is detected.
- * dir = 0 - Turn left.
- * dir = 1 - Turn right.
  *******************************************************************************/
 void backoff(int dir) {
+  // Reverse
+  MakerSumo.setMotorSpeed(MOTOR_L, -50);
+  MakerSumo.setMotorSpeed(MOTOR_R, -50);
+  delay(300);
+
+  // Rotate..
+  if (dir == LEFT) {
+    // Rotate left backward.
+    MakerSumo.setMotorSpeed(MOTOR_L, -50);
+    MakerSumo.setMotorSpeed(MOTOR_R, 50);
+  } else {
+    // Rotate right backward.
+    MakerSumo.setMotorSpeed(MOTOR_L, 50);
+    MakerSumo.setMotorSpeed(MOTOR_R, -50);
+  }
+  delay(600);
+
   // Stop the motors.
   MakerSumo.setMotorSpeed(MOTOR_L, 0);
   MakerSumo.setMotorSpeed(MOTOR_R, 0);
-  delay(100);
-
-  // Rotate..
-  if (dir == 0) {
-    // Rotate left backward.
-    MakerSumo.setMotorSpeed(MOTOR_L, -80);
-    MakerSumo.setMotorSpeed(MOTOR_R, 0);
-  } else {
-    // Rotate right backward.
-    MakerSumo.setMotorSpeed(MOTOR_L, 0);
-    MakerSumo.setMotorSpeed(MOTOR_R, -80);
-  }
-  delay(100);
-
-  // Start looking for opponent.
-  // Timeout after a short period.
-  unsigned long uTurnTimestamp = millis();
-  while (millis() - uTurnTimestamp < 500) {
-    // Opponent is detected if either one of the opponent sensor is triggered.
-    if ( (digitalRead(OPP_FC) == LOW) ||
-         (digitalRead(OPP_FL) == LOW) ||
-         (digitalRead(OPP_FR) == LOW) ) {
-          
-      // Stop the motors.
-      MakerSumo.setMotorSpeed(MOTOR_L, 0);
-      MakerSumo.setMotorSpeed(MOTOR_R, 0);
-      delay(100);
-
-      // Return to the main loop immediately and run the attack program.
-      return;
-    }
-  }
+  delay(50);
 }
