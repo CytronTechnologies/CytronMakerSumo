@@ -90,7 +90,9 @@ void loop() {
     // Keep searching if opponent is not detected.
     if ( (digitalRead(OPP_FC) == HIGH) &&
          (digitalRead(OPP_FL) == HIGH) &&
-         (digitalRead(OPP_FR) == HIGH) ) {
+         (digitalRead(OPP_FR) == HIGH) &&
+         (digitalRead(OPP_L) == HIGH)  &&
+         (digitalRead(OPP_R) == HIGH) ) {
       search(searchDir);
     }
     
@@ -188,6 +190,22 @@ void attack() {
   else if (digitalRead(OPP_FR) == LOW) {
     MakerSumo.setMotorSpeed(MOTOR_L, 255);
     MakerSumo.setMotorSpeed(MOTOR_R, 0);
+  }
+
+  // Opponent in left.
+  // Turn left.
+  else if (digitalRead(OPP_L) == LOW) {
+    MakerSumo.setMotorSpeed(MOTOR_L, -100);
+    MakerSumo.setMotorSpeed(MOTOR_R, 100);
+    delay(300);
+  }
+
+  // Opponent in right.
+  // Turn right.
+  else if (digitalRead(OPP_R) == LOW) {
+    MakerSumo.setMotorSpeed(MOTOR_L, 100);
+    MakerSumo.setMotorSpeed(MOTOR_R, -100);
+    delay(300);
   }
 }
 
