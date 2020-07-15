@@ -379,7 +379,7 @@ Read the calibrated threshold for edge sensor.<br>
 If the sensors are not calibrated before, a default value will be returned.
 
 **Syntax:**<br>
-`int MakerSumo.readBatteryVoltage(int side);`
+`int MakerSumo.readEdgeSensorThreshold(int side);`
 
 **Parameters:**<br>
 - ***side*** - Which side of edge sensor (EDGE_L or EDGE_R).
